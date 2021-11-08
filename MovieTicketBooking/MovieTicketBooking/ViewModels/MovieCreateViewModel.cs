@@ -11,6 +11,9 @@ namespace MovieTicketBooking.ViewModels
     {
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
+        [Required(ErrorMessage ="Release Year is required")]
+        [Display(Name = "Release Year")]
+        public string ReleaseYear { get; set; }
 
         public IFormFile Poster { get; set; }
     }

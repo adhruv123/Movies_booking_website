@@ -45,14 +45,15 @@ namespace MovieTicketBooking.Controllers
                 if (model.Poster != null)
                     path = ProcessUploadedFile(model.Poster);
 
-                dynamic movieDetails = await FetchMovieDetails(model.Title);
+                dynamic movieDetails = await FetchMovieDetails(model.Title,model.ReleaseYear);
 
                 Movie newMovie = new Movie()
                 {
                     Title = model.Title,
                     PosterPath = path,
                     Genre = movieDetails["Genre"].ToString(),
-                    Language = movieDetails["Language"]
+                    Language = movieDetails["Language"],
+                    ReleaseDate=movieDetails["Released"]
                 };
                 _repo.AddMovie(newMovie);
                 return RedirectToAction("Index");
@@ -119,11 +120,11 @@ namespace MovieTicketBooking.Controllers
             return posterPath;
         }
 
-        public async Task<dynamic> FetchMovieDetails(string title)
+        private async Task<dynamic> FetchMovieDetails(string title ,string releaseYear)
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://www.omdbapi.com?apikey=e3d108cb&t=" + title))
+                using (var response = await httpClient.GetAsync("http://www.omdbapi.com?apikey=e3d108cb&t=" + title + "&y=" + releaseYear))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     return JsonConvert.DeserializeObject<dynamic>(apiResponse);
