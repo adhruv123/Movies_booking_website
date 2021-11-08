@@ -30,7 +30,7 @@ namespace MovieTicketBooking.Controllers
         {
             Movie model = _repo.GetMovie(id);
 
-            dynamic movie = await FetchMovieDetails(model.Title);
+            dynamic movie = await FetchMovieDetails(model.Title,DateTime.Parse(model.ReleaseDate).ToString("yyyy"));
 
             ViewBag.Title = movie["Title"];
             ViewBag.Year = movie["Year"];
@@ -66,20 +66,33 @@ namespace MovieTicketBooking.Controllers
 
             ViewBag.Plot = movie["Plot"];
 
+            var movies = _repo.GetAllMovies();
+            char[] c = { ',', ' ' };
+            var genres = model.Genre.Split(c);
+            var similarMovies = new List<Movie>();
+            foreach(var m in movies)
+            {
+                if (genres.Intersect<string>(m.Genre.Split(c)).Count() >= 4 && model.Id != m.Id)
+                {
+                    similarMovies.Add(m);
+                }
+            }
+            ViewBag.SimilarMovies = similarMovies;
             return View(model);
         }
 
-        public async Task<dynamic> FetchMovieDetails(string title)
+        private async Task<dynamic> FetchMovieDetails(string title, string releaseYear)
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("http://www.omdbapi.com?apikey=e3d108cb&t=" + title))
+                using (var response = await httpClient.GetAsync("http://www.omdbapi.com?apikey=e3d108cb&t=" + title + "&y=" + releaseYear))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     return JsonConvert.DeserializeObject<dynamic>(apiResponse);
                 }
             }
         }
+
 
     }
 }

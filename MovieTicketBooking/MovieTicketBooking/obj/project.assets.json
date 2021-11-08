@@ -5954,19 +5954,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vimal\\.nuget\\packages\\": {}
+    "C:\\Users\\l\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\.NetCore\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
+      "projectUniqueName": "D:\\ASPNETProject\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
       "projectName": "MovieTicketBooking",
-      "projectPath": "D:\\Projects\\.NetCore\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
-      "packagesPath": "C:\\Users\\vimal\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\.NetCore\\MovieTicketBooking\\MovieTicketBooking\\obj\\",
+      "projectPath": "D:\\ASPNETProject\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
+      "packagesPath": "C:\\Users\\l\\.nuget\\packages\\",
+      "outputPath": "D:\\ASPNETProject\\MovieTicketBooking\\MovieTicketBooking\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\vimal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\l\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6025,7 +6025,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
       }
     }
   }

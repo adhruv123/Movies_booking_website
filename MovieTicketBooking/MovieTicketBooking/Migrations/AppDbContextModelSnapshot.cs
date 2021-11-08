@@ -231,6 +231,9 @@ namespace MovieTicketBooking.Migrations
                     b.Property<string>("PosterPath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ReleaseDate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
