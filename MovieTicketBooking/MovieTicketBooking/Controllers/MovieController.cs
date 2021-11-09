@@ -30,51 +30,52 @@ namespace MovieTicketBooking.Controllers
         {
             Movie model = _repo.GetMovie(id);
 
-            dynamic movie = await FetchMovieDetails(model.Title,DateTime.Parse(model.ReleaseDate).ToString("yyyy"));
+            dynamic movieDetails = await FetchMovieDetails(model.Title,DateTime.Parse(model.ReleaseDate).ToString("yyyy"));
 
-            ViewBag.Title = movie["Title"];
-            ViewBag.Year = movie["Year"];
-            ViewBag.Runtime = movie["Runtime"];
-            ViewBag.Released = movie["Released"];
-            ViewBag.Genre = movie["Genre"];
+            ViewBag.Title = movieDetails["Title"];
+            ViewBag.Year = movieDetails["Year"];
+            ViewBag.Runtime = movieDetails["Runtime"];
+            ViewBag.Released = movieDetails["Released"];
+            ViewBag.Genre = movieDetails["Genre"];
 
-            string[] languages = movie["Language"].ToString().Split(',');
+            string[] languages = movieDetails["Language"].ToString().Split(',');
             ViewBag.Languages = languages;
 
             Dictionary<string, string> ratings = new Dictionary<string, string>();
-            foreach (var item in movie["Ratings"])
+            foreach (var item in movieDetails["Ratings"])
             {
                 ratings.Add(item["Source"].ToString(), item["Value"].ToString());
             }
             ViewBag.Ratings = ratings;
 
             List<string> actors = new List<string>();
-            foreach (var item in movie["Actors"].ToString().Split(','))
+            foreach (var item in movieDetails["Actors"].ToString().Split(','))
             {
                 actors.Add(item);
             }
             ViewBag.Actors = actors;
 
-            ViewBag.Director = movie["Director"];
+            ViewBag.Director = movieDetails["Director"];
 
             List<string> writers = new List<string>();
-            foreach (var item in movie["Writer"].ToString().Split(','))
+            foreach (var item in movieDetails["Writer"].ToString().Split(','))
             {
                 writers.Add(item);
             }
             ViewBag.Writers = writers;
 
-            ViewBag.Plot = movie["Plot"];
+            ViewBag.Plot = movieDetails["Plot"];
 
             var movies = _repo.GetAllMovies();
             char[] c = { ',', ' ' };
             var genres = model.Genre.Split(c);
             var similarMovies = new List<Movie>();
-            foreach(var m in movies)
+
+            foreach(var movie in movies)
             {
-                if (genres.Intersect<string>(m.Genre.Split(c)).Count() >= 4 && model.Id != m.Id)
+                if (genres.Intersect<string>(movie.Genre.Split(c, StringSplitOptions.RemoveEmptyEntries)).Count() >= 2 && model.Id != movie.Id)
                 {
-                    similarMovies.Add(m);
+                    similarMovies.Add(movie);
                 }
             }
             ViewBag.SimilarMovies = similarMovies;

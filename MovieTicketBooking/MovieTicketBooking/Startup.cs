@@ -40,6 +40,9 @@ namespace MovieTicketBooking
             services.AddControllersWithViews();
 
             services.AddScoped<IMovieRepository, SQLMovieRepository>();
+
+            services.AddScoped<IShowRepository, SQLShowRepository>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

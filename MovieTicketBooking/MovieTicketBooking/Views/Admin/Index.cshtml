@@ -6,7 +6,7 @@
 }
 
 <div class="container my-3">
-    <a asp-action="Create" class="btn btn-sm btn-primary">Add New One</a>
+    <a asp-action="CreateMovie" class="btn btn-sm btn-primary">Add New One</a>
     <table class="table table-hover my-3">
         <thead class="table-dark">
             <tr>
@@ -31,9 +31,11 @@
                     <td>
                         <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">View</a>
                         &nbsp;  &nbsp;
-                        <a asp-action="Edit" asp-route-id="@movie.Id">Edit</a>
+                        <a asp-action="EditMovie" asp-route-id="@movie.Id">Edit</a>
                         &nbsp;  &nbsp;
-                        <a asp-action="Delete" asp-route-id="@movie.Id">Delete</a>
+                        <a asp-action="DeleteMovie" asp-route-id="@movie.Id">Delete</a>
+                        &nbsp;  &nbsp;
+                        <a asp-action="CreateShow" asp-route-id="@movie.Id">Add Show</a>
                     </td>
                 </tr>
             }
