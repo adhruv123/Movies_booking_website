@@ -4,14 +4,9 @@
     string posterPath = "~/images/" + (Model.PosterPath ?? "default-poster.jpg");
 }
 
-
-<div class="d-flex justify-content-center align-items-center" style="height:50px">
-    <div class="mx-3">
-        <a href="" class="text-decoration-none">Details</a>
-    </div>
-    <div class="mx-3">
-        <a href="" class="text-decoration-none">Reviews</a>
-    </div>
+<div class="container d-flex justify-content-between align-items-center my-1">
+    <a asp-action="Index" class="btn btn-dark text-decoration-none my-2">Back</a>
+    <a href="" class="btn btn-dark text-decoration-none mx-2 my-2">Book Now</a>
 </div>
 
 <div class="container-fluid bg-dark">
@@ -78,22 +73,25 @@
     <h3><span class="badge bg-dark text-white">About the Movie</span></h3>
     <p id="desc">@ViewBag.Plot</p>
 </div>
-<div class="container my-3">
-    <h3><span class="badge bg-dark text-white">You might also like</span></h3>
-    <div class="d-flex" style="overflow-x:auto;flex-wrap:nowrap" >
-        @foreach (var movie in ViewBag.SimilarMovies)
-        {
-            string poster = "~/images/" + (movie.PosterPath ?? "default-poster.jpg");
 
-            <div class="my-2 me-2" style="flex:0 0 auto">
-                <a asp-action="Details" asp-route-id="@movie.Id" class="card rounded-3 text-decoration-none">
-                    <img src="@poster" class="img-fluid" style="height: 25rem; width: 17rem" asp-append-version="true">
-                    <div class="text-dark text-center my-2">
-                        @movie.Title
-                    </div>
-                </a>
-            </div>
-        }
+@if (ViewBag.SimilarMovies.Count != 0)
+{
+    <div class="container my-3">
+        <h3><span class="badge bg-dark text-white">You might also like</span></h3>
+        <div class="d-flex" style="overflow-x:auto;flex-wrap:nowrap">
+            @foreach (var movie in ViewBag.SimilarMovies)
+            {
+                string poster = "~/images/" + (movie.PosterPath ?? "default-poster.jpg");
+                <div class="my-2 me-2" style="flex:0 0 auto">
+                    <a asp-action="Details" asp-route-id="@movie.Id" class="card rounded-3 text-decoration-none">
+                        <img src="@poster" class="img-fluid" style="height: 25rem; width: 17rem" asp-append-version="true">
+                        <div class="text-dark text-center my-2">
+                            @movie.Title
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
     </div>
-</div>
+}
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.ViewModels;
 using Newtonsoft.Json;
@@ -15,29 +16,32 @@ namespace MovieTicketBooking.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly IMovieRepository _repo;
+        private readonly IMovieRepository _movieRepo;
+
+        private readonly IShowRepository _showRepo;
 
         private readonly IWebHostEnvironment _env;
 
-        public AdminController(IMovieRepository repo, IWebHostEnvironment env)
+        public AdminController(IShowRepository showRepo,IMovieRepository movieRepo, IWebHostEnvironment env)
         {
-            _repo = repo;
+            _movieRepo = movieRepo;
+            _showRepo = showRepo;
             _env = env;
         }
         public IActionResult Index()
         {
-            var model = _repo.GetAllMovies();
+            var model = _movieRepo.GetAllMovies();
             return View(model);
         }
 
         [HttpGet]
-        public ViewResult Create()
+        public ViewResult CreateMovie()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(MovieCreateViewModel model)
+        public async Task<IActionResult> CreateMovie(MovieCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -55,7 +59,7 @@ namespace MovieTicketBooking.Controllers
                     Language = movieDetails["Language"],
                     ReleaseDate=movieDetails["Released"]
                 };
-                _repo.AddMovie(newMovie);
+                _movieRepo.AddMovie(newMovie);
                 return RedirectToAction("Index");
             }
 
@@ -63,27 +67,34 @@ namespace MovieTicketBooking.Controllers
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public ViewResult EditMovie(int id)
         {
-            var movie = _repo.GetMovie(id);
+            var movie = _movieRepo.GetMovie(id);
 
             MovieEditViewModel model = new MovieEditViewModel()
             {
                 Id = movie.Id,
                 Title = movie.Title,
-                ExistingPosterPath = movie.PosterPath,
+                ReleaseYear = DateTime.Parse(movie.ReleaseDate).ToString("yyyy"),
+                ExistingPosterPath = movie.PosterPath
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Edit(MovieEditViewModel model)
+        public async Task<IActionResult> EditMovie(MovieEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Movie movie = _repo.GetMovie(model.Id);
+                Movie movie = _movieRepo.GetMovie(model.Id);
                 movie.Title = model.Title;
+
+                dynamic movieDetails = await FetchMovieDetails(model.Title, model.ReleaseYear);
+
+                movie.Genre = movieDetails["Genre"];
+                movie.ReleaseDate = movieDetails["Released"];
+                movie.Language = movieDetails["Language"];
 
                 if (model.Poster != null)
                 {
@@ -97,16 +108,16 @@ namespace MovieTicketBooking.Controllers
                     movie.PosterPath = ProcessUploadedFile(model.Poster);
                 }
 
-                _repo.EditMovie(movie);
+                _movieRepo.EditMovie(movie);
                 return RedirectToAction("Index");
             }
 
             return View(model);
         }
 
-        public IActionResult Delete(int id)
+        public IActionResult DeleteMovie(int id)
         {
-            _repo.DeleteMovie(id);
+            _movieRepo.DeleteMovie(id);
             return RedirectToAction("Index");
         }
 
@@ -130,6 +141,22 @@ namespace MovieTicketBooking.Controllers
                     return JsonConvert.DeserializeObject<dynamic>(apiResponse);
                 }
             }
+        }
+
+        /*shows*/
+
+        [HttpGet]
+        public IActionResult CreateShow(int id)
+        {
+            var movie = _movieRepo.GetMovie(id);
+
+            char[] c = { ',', ' ' };
+            var languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries);
+            ViewBag.Languages = languages;
+
+            SelectListItem
+
+            return View();
         }
 
     }

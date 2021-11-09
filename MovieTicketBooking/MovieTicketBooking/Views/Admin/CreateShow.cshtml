@@ -1,0 +1,79 @@
+﻿@model Show
+
+@{
+    ViewBag.Title = "Add Show | Admin";
+}
+
+<div class="container">
+    <h2 class="my-3">Add new show</h2>
+    <hr class="text-primary" />
+    <form asp-action="CreateShow" method="post">
+        <table class="table table-borderless">
+            <tr>
+                <td style="width:200px;">
+                    <label asp-for="Movie" class="form-lable"></label>
+                </td>
+                <td>
+                    <input asp-for="Movie" class="form-control w-50" />
+                    <span asp-validation-for="Movie" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="Language" class="form-lable"></label>
+                </td>
+                <td>
+                    <select asp-for="Language" class="form-select w-50">
+                        @foreach(var language in ViewBag.Languages)
+                        {
+                            <option value="@language">@language</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Language" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="StartDate" class="form-lable"></label>
+                </td>
+                <td>
+                    <input asp-for="StartDate" class="form-control w-50" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="EndDate" class="form-lable"></label>
+                </td>
+                <td>
+                    <input asp-for="EndDate" class="form-control w-50" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="Time" class="form-lable"></label>
+                </td>
+                <td>
+                    <input asp-for="Time" class="form-control w-50" />
+                    <span asp-validation-for="Time" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="Price" class="form-lable"></label>
+                </td>
+                <td>
+                    <input asp-for="Price" class="form-control w-50" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
