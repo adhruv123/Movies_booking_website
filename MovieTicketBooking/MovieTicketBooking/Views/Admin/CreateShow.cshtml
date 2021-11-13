@@ -1,4 +1,4 @@
-﻿@model Show
+﻿@model ShowCreateViewModel
 
 @{
     ViewBag.Title = "Add Show | Admin";
@@ -8,14 +8,14 @@
     <h2 class="my-3">Add new show</h2>
     <hr class="text-primary" />
     <form asp-action="CreateShow" method="post">
+        <input type="hidden" asp-for="MovieId" />
         <table class="table table-borderless">
             <tr>
-                <td style="width:200px;">
-                    <label asp-for="Movie" class="form-lable"></label>
+                <td>
+                    <label asp-for="MovieTitle" class="form-lable"></label>
                 </td>
                 <td>
-                    <input asp-for="Movie" class="form-control w-50" />
-                    <span asp-validation-for="Movie" class="text-danger"></span>
+                    <input asp-for="MovieTitle" class="form-control w-50" disabled />
                 </td>
             </tr>
             <tr>
@@ -24,12 +24,11 @@
                 </td>
                 <td>
                     <select asp-for="Language" class="form-select w-50">
-                        @foreach(var language in ViewBag.Languages)
+                        @foreach (var language in Model.Languages)
                         {
                             <option value="@language">@language</option>
                         }
                     </select>
-                    <span asp-validation-for="Language" class="text-danger"></span>
                 </td>
             </tr>
             <tr>
@@ -38,7 +37,6 @@
                 </td>
                 <td>
                     <input asp-for="StartDate" class="form-control w-50" />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
                 </td>
             </tr>
             <tr>
@@ -55,8 +53,12 @@
                     <label asp-for="Time" class="form-lable"></label>
                 </td>
                 <td>
-                    <input asp-for="Time" class="form-control w-50" />
-                    <span asp-validation-for="Time" class="text-danger"></span>
+                    <select asp-for="Time" class="form-select w-50">
+                        @foreach (var time in Model.Times)
+                        {
+                            <option value="@time">@time</option>
+                        }
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -65,7 +67,6 @@
                 </td>
                 <td>
                     <input asp-for="Price" class="form-control w-50" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
                 </td>
             </tr>
             <tr>

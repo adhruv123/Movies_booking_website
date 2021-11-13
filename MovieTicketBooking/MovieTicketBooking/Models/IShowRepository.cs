@@ -13,8 +13,6 @@ namespace MovieTicketBooking.Models
 
         Show AddShow(Show newShow);
 
-        Show EditShow(Show changedShow);
-
         Show DeleteShow(int id);
     }
 }

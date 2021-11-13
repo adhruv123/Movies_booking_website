@@ -238,8 +238,6 @@ D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\M
 D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\MovieTicketBooking.RazorCoreGenerate.cache
 D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Account\Login.cshtml.g.cs
 D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
-D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Create.cshtml.g.cs
-D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Edit.cshtml.g.cs
 D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Index.cshtml.g.cs
 D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Movie\Details.cshtml.g.cs
 D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Movie\Index.cshtml.g.cs
@@ -256,3 +254,7 @@ D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\M
 D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateMovie.cshtml.g.cs
 D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditMovie.cshtml.g.cs
 D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateShow.cshtml.g.cs
+D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateMovie.cshtml.g.cs
+D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateShow.cshtml.g.cs
+D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditMovie.cshtml.g.cs
+D:\ASPNETProject\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\AllShows.cshtml.g.cs

@@ -145,18 +145,67 @@ namespace MovieTicketBooking.Controllers
 
         /*shows*/
 
+
+        public IActionResult AllShows()
+        {
+            var model = _showRepo.GetAllShows();
+
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult CreateShow(int id)
         {
             var movie = _movieRepo.GetMovie(id);
 
             char[] c = { ',', ' ' };
-            var languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries);
-            ViewBag.Languages = languages;
+            var languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            SelectListItem
+            ShowCreateViewModel model = new ShowCreateViewModel()
+            {
+                MovieId = movie.Id,
+                MovieTitle = movie.Title,
+                StartDate = DateTime.Now.Date,
+                EndDate = DateTime.Now.AddDays(7).Date,
+                Languages = languages,
 
-            return View();
+                Price = 250,
+                Times = new List<string>(){"9:00 AM", "12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult CreateShow(ShowCreateViewModel model)
+        {
+           /* if (DateTime.Compare(model.StartDate,model.EndDate) >= 0)
+            {
+                ModelState.AddModelError("EndDate", "End date must be valid according to start date");
+                var movie = _movieRepo.GetMovie(model.MovieId);
+
+                char[] c = { ',', ' ' };
+                var languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries);
+                ViewBag.Languages = languages;
+                var x = model.Time;
+                return View(model);
+            }*/
+
+           
+            Show show = new Show()
+            {
+                 MovieId = model.MovieId,
+                 StartDate = model.StartDate.ToString(),
+                 EndDate = model.EndDate.ToString(),
+                 Language = model.Language,
+                 Time = model.Time,
+                 Price = model.Price
+            };
+            _showRepo.AddShow(show);
+            
+            
+
+            return RedirectToAction("Index");
+
         }
 
     }
