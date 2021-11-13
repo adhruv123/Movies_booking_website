@@ -14,21 +14,15 @@ namespace MovieTicketBooking.Models
 
         public Movie Movie { get; set; }
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
+        public string StartDate { get; set; }
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public string EndDate { get; set; }
 
-        [Required]
         public string Time { get; set; }
 
-        [Required]
         public string Language { get; set; }
 
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
     }
 }

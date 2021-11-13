@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,19 +27,17 @@ namespace MovieTicketBooking.Models
             throw new NotImplementedException();
         }
 
-        public Show EditShow(Show changedShow)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public IEnumerable<Show> GetAllShows()
         {
-            throw new NotImplementedException();
+            return _context.Shows.Include(m=>m.Movie);
         }
 
         public Show GetShow(int id)
         {
-            throw new NotImplementedException();
+            return _context.Shows.Find(id);
+
         }
     }
 }
