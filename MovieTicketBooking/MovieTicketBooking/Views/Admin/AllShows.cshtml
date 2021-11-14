@@ -6,6 +6,7 @@
 }
 
 <div class="container my-3">
+    <a asp-action="DeleteExpiredShow" class="btn btn-sm btn-primary">Delete Expired Show</a>
     <table class="table table-hover my-3">
         <thead class="table-dark">
             <tr>
@@ -30,7 +31,7 @@
                     <td>@DateTime.Parse(show.EndDate).ToString("dd MMM yyyy")</td>
                     <td>@show.Language</td>
                     <td>@show.Time</td>
-                    <td>@show.Price</td>
+                    <td>@show.Price₹</td>
                     <td>
                         <a asp-action="DeleteShow" asp-route-id="@show.Id" class="fa" style="font-size:24px;color:red">&#xf014;</a>
                     </td>

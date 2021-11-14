@@ -14,5 +14,7 @@ namespace MovieTicketBooking.Models
         Show AddShow(Show newShow);
 
         Show DeleteShow(int id);
+
+        void DeleteExpiredShow();
     }
 }

@@ -159,7 +159,6 @@ namespace MovieTicketBooking.Controllers
             var movie = _movieRepo.GetMovie(id);
 
             char[] c = { ',', ' ' };
-            var languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             ShowCreateViewModel model = new ShowCreateViewModel()
             {
@@ -167,8 +166,7 @@ namespace MovieTicketBooking.Controllers
                 MovieTitle = movie.Title,
                 StartDate = DateTime.Now.Date,
                 EndDate = DateTime.Now.AddDays(7).Date,
-                Languages = languages,
-
+                Languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 Price = 250,
                 Times = new List<string>(){"9:00 AM", "12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
             };
@@ -178,19 +176,38 @@ namespace MovieTicketBooking.Controllers
         [HttpPost]
         public IActionResult CreateShow(ShowCreateViewModel model)
         {
-           /* if (DateTime.Compare(model.StartDate,model.EndDate) >= 0)
-            {
-                ModelState.AddModelError("EndDate", "End date must be valid according to start date");
-                var movie = _movieRepo.GetMovie(model.MovieId);
+            var movie = _movieRepo.GetMovie(model.MovieId);
+            char[] c = { ',', ' ' };
+            model.MovieTitle = movie.Title;
+            model.Languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList();
+            model.Times = new List<string>() { "9:00 AM", "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM" };
 
-                char[] c = { ',', ' ' };
-                var languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries);
-                ViewBag.Languages = languages;
-                var x = model.Time;
+           /* if (DateTime.Compare(model.StartDate, DateTime.Parse(DateTime.Now.ToString("dd-MM-yyyy"))) < 0)
+            {
+                ModelState.AddModelError("StartDate", "You can't select dates prior to today");
                 return View(model);
             }*/
 
-           
+            if (DateTime.Compare(model.StartDate, model.EndDate) >= 0)
+            {
+                ModelState.AddModelError("EndDate", "End date must be valid according to start date");
+                return View(model);
+            }
+
+            var allShows = _showRepo.GetAllShows();
+            foreach(var s in allShows)
+            {
+                if(DateTime.Compare(model.StartDate, DateTime.Parse(s.StartDate))>= 0 && DateTime.Compare(model.EndDate, DateTime.Parse(s.EndDate)) <= 0)
+                {
+                    if(s.Time==model.Time)
+                    {
+                        ModelState.AddModelError("Time", "Show is already exist for this time slot");
+                        return View(model);
+                    }
+                }
+            }
+
+
             Show show = new Show()
             {
                  MovieId = model.MovieId,
@@ -202,9 +219,28 @@ namespace MovieTicketBooking.Controllers
             };
             _showRepo.AddShow(show);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("AllShows");
         }
 
+        public IActionResult DeleteShow(int id)
+        {
+            _showRepo.DeleteShow(id);
+            return RedirectToAction("AllShows");
+        }
+        public IActionResult DeleteExpiredShow()
+        {
+            _showRepo.DeleteExpiredShow();
+            /*var allShows = _showRepo.GetAllShows();
+            foreach(var show in allShows)
+            {
+                if (DateTime.Compare(DateTime.Parse(show.EndDate), DateTime.Parse(DateTime.Now.ToString("dd-MM-yyyy"))) < 0)
+                {
+                    _showRepo.DeleteShow(24);
+                }
+
+            }*/
+            return RedirectToAction("AllShows");
+        }
     }
 }
 
