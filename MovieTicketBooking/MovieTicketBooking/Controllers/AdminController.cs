@@ -194,18 +194,15 @@ namespace MovieTicketBooking.Controllers
             Show show = new Show()
             {
                  MovieId = model.MovieId,
-                 StartDate = model.StartDate.ToString(),
-                 EndDate = model.EndDate.ToString(),
+                 StartDate = model.StartDate.ToString("dd-MM-yyyy"),
+                 EndDate = model.EndDate.ToString("dd-MM-yyyy"),
                  Language = model.Language,
                  Time = model.Time,
                  Price = model.Price
             };
             _showRepo.AddShow(show);
-            
-            
 
             return RedirectToAction("Index");
-
         }
 
     }

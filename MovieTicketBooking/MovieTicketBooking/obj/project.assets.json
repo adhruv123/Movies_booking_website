@@ -5954,19 +5954,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\l\\.nuget\\packages\\": {}
+    "C:\\Users\\KENIL\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ASPNETProject\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
+      "projectUniqueName": "E:\\All Program\\SEM 5 PROJECTS\\.NET Core\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
       "projectName": "MovieTicketBooking",
-      "projectPath": "D:\\ASPNETProject\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
-      "packagesPath": "C:\\Users\\l\\.nuget\\packages\\",
-      "outputPath": "D:\\ASPNETProject\\MovieTicketBooking\\MovieTicketBooking\\obj\\",
+      "projectPath": "E:\\All Program\\SEM 5 PROJECTS\\.NET Core\\MovieTicketBooking\\MovieTicketBooking\\MovieTicketBooking.csproj",
+      "packagesPath": "C:\\Users\\KENIL\\.nuget\\packages\\",
+      "outputPath": "E:\\All Program\\SEM 5 PROJECTS\\.NET Core\\MovieTicketBooking\\MovieTicketBooking\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\l\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\KENIL\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
