@@ -24,10 +24,23 @@ namespace MovieTicketBooking.Models
 
         public Show DeleteShow(int id)
         {
-            throw new NotImplementedException();
+            var show = _context.Shows.Find(id);
+            _context.Shows.Remove(show);
+            _context.SaveChanges();
+            return show;
         }
-
-       
+        public void DeleteExpiredShow()
+        {
+            var allShows = GetAllShows();
+            foreach (var show in allShows)
+            {
+                if (DateTime.Compare(DateTime.Parse(show.EndDate), DateTime.Parse(DateTime.Now.ToString("dd-MM-yyyy"))) < 0)
+                {
+                    _context.Shows.Remove(show);
+                }
+            }
+            _context.SaveChanges();
+        }
 
         public IEnumerable<Show> GetAllShows()
         {
@@ -37,7 +50,6 @@ namespace MovieTicketBooking.Models
         public Show GetShow(int id)
         {
             return _context.Shows.Find(id);
-
         }
     }
 }

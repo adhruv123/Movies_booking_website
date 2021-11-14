@@ -37,6 +37,7 @@
                 </td>
                 <td>
                     <input asp-for="StartDate" class="form-control w-50" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
                 </td>
             </tr>
             <tr>
@@ -59,6 +60,7 @@
                             <option value="@time">@time</option>
                         }
                     </select>
+                    <span asp-validation-for="Time" class="text-danger"></span>
                 </td>
             </tr>
             <tr>
