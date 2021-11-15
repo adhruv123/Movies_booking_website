@@ -143,23 +143,26 @@ namespace MovieTicketBooking.Controllers
             }
         }
 
-        /*shows*/
 
 
-        public IActionResult AllShows()
-        {
-            var model = _showRepo.GetAllShows();
+        /* ---------------------- shows ------------------------------------------------------*/
 
-            return View(model);
-        }
 
         [HttpGet]
         public IActionResult CreateShow(int id)
         {
+            // for showing available time slots on CreateShows.cshtml page
+            var allShows = _showRepo.GetAllShows();
+            List<string> timeSlot = new List<string>();
+            foreach (var s in allShows)
+            {
+                timeSlot.Add(s.Time);
+            }
+/*            ViewBag.timeSlot = timeSlot;
+*/            // ------------------------------------------------------------
+
             var movie = _movieRepo.GetMovie(id);
-
             char[] c = { ',', ' ' };
-
             ShowCreateViewModel model = new ShowCreateViewModel()
             {
                 MovieId = movie.Id,
@@ -170,23 +173,37 @@ namespace MovieTicketBooking.Controllers
                 Price = 250,
                 Times = new List<string>(){"9:00 AM", "12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
             };
+            model.KShows = ( allShows);
+
             return View(model);
         }
 
         [HttpPost]
         public IActionResult CreateShow(ShowCreateViewModel model)
         {
+            // for showing available time slots on CreateShows.cshtml page
+            var allShows = _showRepo.GetAllShows();
+            List<string> timeSlot = new List<string>();
+            foreach (var s in allShows)
+            {
+                timeSlot.Add(s.Time);
+            }
+/*            ViewBag.timeSlot = timeSlot;
+*/            // ------------------------------------------------------------
+            /*model.TimeSlot = timeSlot;*/
+
+
             var movie = _movieRepo.GetMovie(model.MovieId);
             char[] c = { ',', ' ' };
             model.MovieTitle = movie.Title;
             model.Languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList();
             model.Times = new List<string>() { "9:00 AM", "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM" };
 
-           /* if (DateTime.Compare(model.StartDate, DateTime.Parse(DateTime.Now.ToString("dd-MM-yyyy"))) < 0)
+            if (DateTime.Compare(model.StartDate, DateTime.Parse(DateTime.Now.ToString("dd-MM-yyyy"))) < 0)
             {
                 ModelState.AddModelError("StartDate", "You can't select dates prior to today");
                 return View(model);
-            }*/
+            }
 
             if (DateTime.Compare(model.StartDate, model.EndDate) >= 0)
             {
@@ -194,7 +211,6 @@ namespace MovieTicketBooking.Controllers
                 return View(model);
             }
 
-            var allShows = _showRepo.GetAllShows();
             foreach(var s in allShows)
             {
                 if(DateTime.Compare(model.StartDate, DateTime.Parse(s.StartDate))>= 0 && DateTime.Compare(model.EndDate, DateTime.Parse(s.EndDate)) <= 0)
@@ -207,7 +223,6 @@ namespace MovieTicketBooking.Controllers
                 }
             }
 
-
             Show show = new Show()
             {
                  MovieId = model.MovieId,
@@ -218,8 +233,13 @@ namespace MovieTicketBooking.Controllers
                  Price = model.Price
             };
             _showRepo.AddShow(show);
-
             return RedirectToAction("AllShows");
+        }
+
+        public IActionResult AllShows()
+        {
+            var model = _showRepo.GetAllShows();
+            return View(model);
         }
 
         public IActionResult DeleteShow(int id)
@@ -230,15 +250,6 @@ namespace MovieTicketBooking.Controllers
         public IActionResult DeleteExpiredShow()
         {
             _showRepo.DeleteExpiredShow();
-            /*var allShows = _showRepo.GetAllShows();
-            foreach(var show in allShows)
-            {
-                if (DateTime.Compare(DateTime.Parse(show.EndDate), DateTime.Parse(DateTime.Now.ToString("dd-MM-yyyy"))) < 0)
-                {
-                    _showRepo.DeleteShow(24);
-                }
-
-            }*/
             return RedirectToAction("AllShows");
         }
     }
