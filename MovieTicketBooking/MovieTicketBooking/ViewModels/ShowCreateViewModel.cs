@@ -14,17 +14,20 @@ namespace MovieTicketBooking.ViewModels
         [Display(Name ="Movie")]
         public string MovieTitle { get; set; }
 
-        [Required]
+        /*[Required]*/
         [DataType(DataType.Date)]
         [Display(Name ="Start Date")]
         public DateTime StartDate { get; set; }
         
-        [Required]
+        /*[Required]*/
         [Display(Name ="End Date")]
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         public List<string> Times { get; set; }
+
+        /*public List<string> TimeSlot { get; set; }*/
+        public IEnumerable<Models.Show> KShows { get; set; }
 
         [Required]
         public string Time { get; set; }

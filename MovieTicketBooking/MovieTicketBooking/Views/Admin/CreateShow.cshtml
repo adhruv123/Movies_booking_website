@@ -2,11 +2,16 @@
 
 @{
     ViewBag.Title = "Add Show | Admin";
-}
+@*    List<string> timeSlot = Model.TimeSlot;
+*@}
 
 <div class="container">
-    <h2 class="my-3">Add new show</h2>
+    <h2 class="my-3">Add New Show</h2>
     <hr class="text-primary" />
+
+
+
+
     <form asp-action="CreateShow" method="post">
         <input type="hidden" asp-for="MovieId" />
         <table class="table table-borderless">
@@ -36,7 +41,7 @@
                     <label asp-for="StartDate" class="form-lable"></label>
                 </td>
                 <td>
-                    <input asp-for="StartDate" class="form-control w-50" />
+                    <input id="StartDate" asp-for="StartDate" class="form-control w-50" onchange="my_reload()" />
                     <span asp-validation-for="StartDate" class="text-danger"></span>
                 </td>
             </tr>
@@ -45,7 +50,7 @@
                     <label asp-for="EndDate" class="form-lable"></label>
                 </td>
                 <td>
-                    <input asp-for="EndDate" class="form-control w-50" />
+                    <input id="EndDate" asp-for="EndDate" class="form-control w-50" onchange="my_reload()" />
                     <span asp-validation-for="EndDate" class="text-danger"></span>
                 </td>
             </tr>
@@ -54,11 +59,11 @@
                     <label asp-for="Time" class="form-lable"></label>
                 </td>
                 <td>
-                    <select asp-for="Time" class="form-select w-50">
-                        @foreach (var time in Model.Times)
+                    <select asp-for="Time" class="form-select w-50" id="time_option">
+                       @* @foreach (var time in Model.Times)
                         {
                             <option value="@time">@time</option>
-                        }
+                        }*@
                     </select>
                     <span asp-validation-for="Time" class="text-danger"></span>
                 </td>
@@ -79,4 +84,112 @@
             </tr>
         </table>
     </form>
+    <input type="hidden" id="some" value="@ViewBag.timeSlot" />
+    <br />
+    <hr class="text-primary" />
+    <br />
+    <h4 class="my-3">Show's slot available on Screen-1</h4>
+   @* @foreach (var time in Model.Times)
+    {
+        if (Model.TimeSlot.Contains(time))
+        {
+            <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off" checked disabled>
+            <label class="btn btn-outline-primary" for="btn-check-outlined">@time</label>
+        }
+        else
+        {
+            <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off" disabled>
+            <label class="btn btn-outline-primary" for="btn-check-outlined">@time</label>
+        }
+
+    }*@
+    <button type="button" class="btn btn-primary" onclick="dothis()">RRR</button>
+    <div>
+        <p id="s"></p>
+        <p id="e"></p>
+        <p id="t"></p>
+        <p id="tt"></p>
+    </div>
+    
 </div>
+
+@section Scripts {
+    <script>
+
+        function fixed_date(str) {
+            var dd = str.split("-");
+            var ddd = dd.reverse();
+            return ddd.join("-");
+        }
+
+        function my_reload() {
+            var startDate = document.getElementById("StartDate").value;
+            var EndDate = document.getElementById("EndDate").value;
+            localStorage.setItem("startDate", startDate);
+            localStorage.setItem("EndDate", EndDate);
+            location.reload();
+        }
+
+        window.onload = function () {
+            var startDate = localStorage.getItem("startDate");
+            var EndDate = localStorage.getItem("EndDate");
+            document.getElementById("StartDate").value = startDate;
+            document.getElementById("EndDate").value = EndDate;
+            localStorage.removeItem("startDate");
+            localStorage.removeItem("EndDate");
+            console.log(startDate + EndDate);
+            var Times = JSON.parse('@Json.Serialize(@Model.Times)');
+            var AllShows = JSON.parse('@Json.Serialize(@Model.KShows)');
+
+
+            @*console.log(AllShows[0]);
+            console.log((new Date(startDate)))*@
+           @* console.log(new Date(fixed_date(AllShows[0].endDate)));*@
+
+            for (var s in AllShows) {
+                @*if (new Date(startDate) > new Date(s.startDate) && new Date(EndDate) > new Date(s.startDate))*@
+                var time_option = document.getElementById("time_option");
+
+                console.log(new Date(startDate) > new Date(fixed_date(AllShows[s].endDate)))
+
+                console.log((startDate) +" " + fixed_date(AllShows[s].endDate))
+                if (new Date(startDate) > new Date(fixed_date(AllShows[s].endDate))) {
+                   
+                    var option = document.createElement("option");
+                    option.value = AllShows[s].time;
+                    option.text = AllShows[s].time;
+                    time_option.add(option);
+                    console.log(AllShows[s] + "-----------")
+                }
+            }
+
+
+        }
+        function dothis() {
+            var TimeSlot = JSON.parse('@Json.Serialize(@Model.KShows)');
+            document.getElementById("tt").innerHTML = TimeSlot;
+            console.log(TimeSlot)
+        }
+
+
+
+   @* function dothis() {
+        d = document.getElementById("StartDate").value;
+        document.getElementById("s").innerHTML = d;
+        var d = document.getElementById("EndDate").value;
+        document.getElementById("e").innerHTML = d;
+
+
+        var today = new Date();
+        document.getElementById("t").innerHTML = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+
+        var TimeSlot = JSON.parse('@Json.Serialize(@Model.TimeSlot)');
+        var Times = JSON.parse('@Json.Serialize(@Model.Times)');
+        document.getElementById("tt").innerHTML = time;
+
+
+    }*@
+
+
+    </script>
+}
