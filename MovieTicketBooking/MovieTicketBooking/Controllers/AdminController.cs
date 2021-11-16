@@ -144,36 +144,25 @@ namespace MovieTicketBooking.Controllers
         }
 
 
-
         /* ---------------------- shows ------------------------------------------------------*/
 
 
         [HttpGet]
         public IActionResult CreateShow(int id)
         {
-            // for showing available time slots on CreateShows.cshtml page
-            var allShows = _showRepo.GetAllShows();
-           /* List<string> timeSlot = new List<string>();
-            foreach (var s in allShows)
-            {
-                timeSlot.Add(s.Time);
-            }*/
-/*            ViewBag.timeSlot = timeSlot;
-*/            // ------------------------------------------------------------
-
             var movie = _movieRepo.GetMovie(id);
             char[] c = { ',', ' ' };
+
             ShowCreateViewModel model = new ShowCreateViewModel()
             {
                 MovieId = movie.Id,
                 MovieTitle = movie.Title,
-                /*StartDate = DateTime.Now.Date,
-                EndDate = DateTime.Now.AddDays(7).Date,*/
                 Languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 Price = 250,
                 Times = new List<string>(){"9:00 AM", "12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
             };
-            model.KShows = ( allShows);
+            var allShows = _showRepo.GetAllShows();
+            model.AvailableShowSlot = ( allShows);
 
             return View(model);
         }
@@ -181,20 +170,10 @@ namespace MovieTicketBooking.Controllers
         [HttpPost]
         public IActionResult CreateShow(ShowCreateViewModel model)
         {
-            // for showing available time slots on CreateShows.cshtml page
             var allShows = _showRepo.GetAllShows();
-            /*List<string> timeSlot = new List<string>();
-            foreach (var s in allShows)
-            {
-                timeSlot.Add(s.Time);
-            }*/
-/*            ViewBag.timeSlot = timeSlot;
-*/            // ------------------------------------------------------------
-            /*model.TimeSlot = timeSlot;*/
-
-
             var movie = _movieRepo.GetMovie(model.MovieId);
             char[] c = { ',', ' ' };
+
             model.MovieTitle = movie.Title;
             model.Languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList();
             model.Times = new List<string>() { "9:00 AM", "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM" };

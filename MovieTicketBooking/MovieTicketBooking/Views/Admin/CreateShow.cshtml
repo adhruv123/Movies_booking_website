@@ -8,9 +8,6 @@
     <h2 class="my-3">Add New Show</h2>
     <hr class="text-primary" />
 
-
-
-
     <form asp-action="CreateShow" method="post">
         <input type="hidden" asp-for="MovieId" />
         <table class="table table-borderless">
@@ -40,7 +37,7 @@
                     <label asp-for="StartDate" class="form-lable"></label>
                 </td>
                 <td>
-                    <input id="StartDate" asp-for="StartDate" class="form-control w-50" onchange="my_reload()" value="null"/>
+                    <input id="StartDate" asp-for="StartDate" class="form-control w-50" onchange="page_reload()" value="null" />
                     <span asp-validation-for="StartDate" class="text-danger"></span>
                 </td>
             </tr>
@@ -49,7 +46,7 @@
                     <label asp-for="EndDate" class="form-lable"></label>
                 </td>
                 <td>
-                    <input id="EndDate" asp-for="EndDate" class="form-control w-50" onchange="my_reload()" value="null" />
+                    <input id="EndDate" asp-for="EndDate" class="form-control w-50" onchange="page_reload()" value="null" />
                     <span asp-validation-for="EndDate" class="text-danger"></span>
                 </td>
             </tr>
@@ -59,10 +56,10 @@
                 </td>
                 <td>
                     <select asp-for="Time" class="form-select w-50" id="time_option">
-                       @* @foreach (var time in Model.Times)
-                        {
-                            <option value="@time">@time</option>
-                        }*@
+                        @* @foreach (var time in Model.Times)
+                            {
+                                <option value="@time">@time</option>
+                            }*@
                     </select>
                     <span asp-validation-for="Time" class="text-danger"></span>
                 </td>
@@ -83,89 +80,78 @@
             </tr>
         </table>
     </form>
-   
-    <div>
-        <p id="s"></p>
-        <p id="e"></p>
-        <p id="t"></p>
-        <p id="tt"></p>
-    </div>
-    
+    <button type="button" class="btn btn-primary" onclick="dothis()">RRR</button>
+
 </div>
 
 @section Scripts {
+
     <script>
 
-
-        function fixed_date(str) {
-            var dd = str.split("-");
-            var ddd = dd.reverse();
-            return ddd.join("-");
-        }
-
-        function my_reload() {
-            var startDate = document.getElementById("StartDate").value;
+        function page_reload() {
+            var StartDate = document.getElementById("StartDate").value;
             var EndDate = document.getElementById("EndDate").value;
-            localStorage.setItem("startDate", startDate);
+            localStorage.setItem("StartDate", StartDate);
             localStorage.setItem("EndDate", EndDate);
             location.reload();
         }
 
-       @* function my() {
-            document.getElementById("startDate").value = new Date();
-            document.getElementById("EndDate").value = new Date();
-            console.log("jhjs")
-        }*@
-
-
-
-        window.onload = function () {
-            var StartDate = localStorage.getItem("startDate");
+        window.onload = function ()
+        {
+            var StartDate = localStorage.getItem("StartDate");
             var EndDate = localStorage.getItem("EndDate");
 
-            if (!StartDate & !EndDate)
+            if (StartDate==null)
                 return;
 
             document.getElementById("StartDate").value = StartDate;
+
+            if (!EndDate)
+                return;
+
             document.getElementById("EndDate").value = EndDate;
-            localStorage.removeItem("startDate");
+            localStorage.removeItem("StartDate");
             localStorage.removeItem("EndDate");
 
-            var Times = JSON.parse('@Json.Serialize(@Model.Times)');
-            var AllShows = JSON.parse('@Json.Serialize(@Model.KShows)');
+            var AllTimeSlots = JSON.parse('@Json.Serialize(@Model.Times)');
+            var AllShows = JSON.parse('@Json.Serialize(@Model.AvailableShowSlot)');
 
-            for (var time in Times) {
+            for (var timeSlot in AllTimeSlots)
+            {
+                console.log(AllTimeSlots[timeSlot]);
                 var time_option = document.getElementById("time_option");
                 var option = document.createElement("option");
-                option.value = Times[time];
-                option.text = Times[time];
+                option.value = AllTimeSlots[timeSlot];
+                option.text = AllTimeSlots[timeSlot];
                 time_option.add(option);
             }
 
-
-            for (var s in AllShows) {
+            for (var show in AllShows)
+            {
                 var time_option = document.getElementById("time_option");
-                @*console.log(new Date(startDate) > new Date(fixed_date(AllShows[s].endDate)))
-                console.log((startDate) + " " + fixed_date(AllShows[s].endDate))*@
-
-                if (new Date(StartDate) < new Date(fixed_date(AllShows[s].endDate))) {
-                    console.log("1");
-                    if (new Date(EndDate) > new Date(fixed_date(AllShows[s].startDate))) {
-                        console.log("2");
-                        time_option.remove(AllShows[s].time);
+                console.log(StartDate +" "+ EndDate);
+                console.log(fixed_date(AllShows[show].startDate) +" "+ fixed_date(AllShows[show].endDate) )
+                if (new Date(StartDate) <= new Date(fixed_date(AllShows[show].endDate)))
+                {
+                    if (new Date(EndDate) > new Date(fixed_date(AllShows[show].startDate)))
+                    {
+                        console.log(AllShows[show].time)
+                        time_option.remove(AllShows[show].time);
+                        console.log(time_option)
                     }
-                @*}
-                else if (new Date(EndDate) < new Date(fixed_date(AllShows[s].endDate))) {
-
-                }*@
                 }
             }
         }
-        function dothis() {
-            var TimeSlot = JSON.parse('@Json.Serialize(@Model.KShows)');
-            document.getElementById("tt").innerHTML = TimeSlot;
-            console.log(TimeSlot)
+
+        function fixed_date(str) {
+            var d = str.split("-");
+            var dd = d.reverse();
+            return dd.join("-");
         }
 
+        function dothis() {
+            var time_option = document.getElementById("time_option");
+            console.log(time_option.value)
+        }
     </script>
 }

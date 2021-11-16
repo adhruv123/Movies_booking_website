@@ -93,7 +93,5 @@ namespace MovieTicketBooking.Controllers
                 }
             }
         }
-
-
     }
 }
