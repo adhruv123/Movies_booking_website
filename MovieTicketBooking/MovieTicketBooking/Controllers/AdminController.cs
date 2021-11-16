@@ -153,11 +153,11 @@ namespace MovieTicketBooking.Controllers
         {
             // for showing available time slots on CreateShows.cshtml page
             var allShows = _showRepo.GetAllShows();
-            List<string> timeSlot = new List<string>();
+           /* List<string> timeSlot = new List<string>();
             foreach (var s in allShows)
             {
                 timeSlot.Add(s.Time);
-            }
+            }*/
 /*            ViewBag.timeSlot = timeSlot;
 */            // ------------------------------------------------------------
 
@@ -167,8 +167,8 @@ namespace MovieTicketBooking.Controllers
             {
                 MovieId = movie.Id,
                 MovieTitle = movie.Title,
-                StartDate = DateTime.Now.Date,
-                EndDate = DateTime.Now.AddDays(7).Date,
+                /*StartDate = DateTime.Now.Date,
+                EndDate = DateTime.Now.AddDays(7).Date,*/
                 Languages = movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 Price = 250,
                 Times = new List<string>(){"9:00 AM", "12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
@@ -183,11 +183,11 @@ namespace MovieTicketBooking.Controllers
         {
             // for showing available time slots on CreateShows.cshtml page
             var allShows = _showRepo.GetAllShows();
-            List<string> timeSlot = new List<string>();
+            /*List<string> timeSlot = new List<string>();
             foreach (var s in allShows)
             {
                 timeSlot.Add(s.Time);
-            }
+            }*/
 /*            ViewBag.timeSlot = timeSlot;
 */            // ------------------------------------------------------------
             /*model.TimeSlot = timeSlot;*/

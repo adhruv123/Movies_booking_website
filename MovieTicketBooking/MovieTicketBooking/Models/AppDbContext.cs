@@ -15,5 +15,7 @@ namespace MovieTicketBooking.Models
 
         public DbSet<Show> Shows { get; set; }
 
+        public DbSet<Booking> Bookings { get; set; }
+
     }
 }

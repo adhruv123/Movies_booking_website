@@ -347,3 +347,4 @@ E:\All Program\SEM 5 PROJECTS\.NET Core\MovieTicketBooking\MovieTicketBooking\ob
 E:\All Program\SEM 5 PROJECTS\.NET Core\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\MovieTicketBooking.dll
 E:\All Program\SEM 5 PROJECTS\.NET Core\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\MovieTicketBooking.pdb
 E:\All Program\SEM 5 PROJECTS\.NET Core\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\MovieTicketBooking.genruntimeconfig.cache
+E:\All Program\SEM 5 PROJECTS\.NET Core\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Booking\Index.cshtml.g.cs

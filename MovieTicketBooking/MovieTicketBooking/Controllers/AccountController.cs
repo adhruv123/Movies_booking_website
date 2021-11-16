@@ -41,7 +41,7 @@ namespace MovieTicketBooking.Controllers
 
                 if (result.Succeeded)
                 {
-                    /*await _userManager.AddToRoleAsync(user, "Admin");*/
+                    await _userManager.AddToRoleAsync(user, "Admin");
 
                     await _signinManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Movie");
