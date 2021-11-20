@@ -353,3 +353,4 @@ D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3
 D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Booking\BookTickets.cshtml.g.cs
 D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Shows.cshtml.g.cs
 D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Bookings.cshtml.g.cs
+D:\Projects\.NetCore\MovieTicketBooking\MovieTicketBooking\obj\Debug\netcoreapp3.1\Razor\Views\Booking\ViewBookings.cshtml.g.cs

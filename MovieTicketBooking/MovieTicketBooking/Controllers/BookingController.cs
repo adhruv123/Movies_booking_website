@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MovieTicketBooking.Models;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MovieTicketBooking.Controllers
 {
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly IMovieRepository _movieRepo;
@@ -19,7 +21,6 @@ namespace MovieTicketBooking.Controllers
         private readonly IBookingRepository _bookingRepo;
 
         private readonly UserManager<IdentityUser> _userManager;
-
 
         public BookingController(UserManager<IdentityUser> userManager, IShowRepository showRepo, IMovieRepository movieRepo, IBookingRepository bookingRepo)
         {
@@ -65,7 +66,35 @@ namespace MovieTicketBooking.Controllers
         [HttpPost]
         public IActionResult Index(BookingIndexViewModel model)
         {
-            return RedirectToAction("Shows", model);
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Shows", model);
+            }
+            else
+            {
+                var movie = _movieRepo.GetMovie(model.MovieId);
+                var showDates = new List<SelectListItem>();
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var date = DateTime.Now.AddDays(i + 1).ToString("dd, MMM yyyy");
+                    showDates.Add(new SelectListItem() { Text = date, Value = date, Selected = false });
+                }
+
+                var languages = new List<SelectListItem>();
+
+                char[] c = { ',', ' ' };
+
+                foreach (var language in movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList())
+                {
+                    languages.Add(new SelectListItem() { Text = language, Value = language, Selected = false });
+                }
+
+                model.ShowDates = showDates;
+                model.Languages = languages;
+
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -105,13 +134,39 @@ namespace MovieTicketBooking.Controllers
         [ActionName("Shows")]
         public IActionResult SelectShow(SelectShowViewModel model)
         {
-            return RedirectToAction("BookTickets", model);
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("BookTickets", model);
+            }
+            else
+            {
+                var times = new List<SelectListItem>();
+
+                var shows = _showRepo.GetAllShows();
+                foreach (var show in shows)
+                {
+                    if (show.Movie.Id == model.MovieId)
+                    {
+                        if (DateTime.Compare(DateTime.Parse(show.StartDate), DateTime.Parse(model.ShowDate)) <= 0 && DateTime.Compare(DateTime.Parse(show.EndDate), DateTime.Parse(model.ShowDate)) >= 0)
+                        {
+                            if (show.Language == model.Language)
+                            {
+                                times.Add(new SelectListItem() { Text = show.Time, Value = show.Id.ToString(), Selected = false });
+                            }
+                        }
+                    }
+                }
+
+                model.Times = times;
+
+                return View(model);
+            }
         }
 
         [HttpGet]
         public IActionResult BookTickets(SelectShowViewModel m)
         {
-            var show = _showRepo.GetShow(m.ShowId);
+            var show = _showRepo.GetShow(m.ShowId??1);
             ViewBag.MovieTitle = m.MovieTitle;
             ViewBag.ShowDate = m.ShowDate;
             ViewBag.Language = m.Language;
@@ -165,7 +220,26 @@ namespace MovieTicketBooking.Controllers
                 _bookingRepo.AddBooking(booking);
                 }
             }
-            return RedirectToAction("Index", "Movie");
+            return RedirectToAction("ViewBookings");
+        }
+
+        [ActionName("ViewBookings")]
+        public async Task<IActionResult> UserBookings()
+        {
+            var bookings = _bookingRepo.GetAllBookings();
+            var user = await _userManager.GetUserAsync(User);
+
+            var userBookings = new List<Booking>();
+
+            foreach(var booking in bookings)
+            {
+                if(booking.IdentityUser.Id == user.Id)
+                {
+                    userBookings.Add(booking);
+                }
+            }
+
+            return View(userBookings);
         }
 
     }

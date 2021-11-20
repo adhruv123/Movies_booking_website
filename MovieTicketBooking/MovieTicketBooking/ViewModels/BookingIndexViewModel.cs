@@ -12,17 +12,16 @@ namespace MovieTicketBooking.ViewModels
     {
         public List<SelectListItem> ShowDates { get; set; }
 
-        [Display(Name = "date")]
+        [Required(ErrorMessage = "Select a date")]
         public string ShowDate { get; set; }
         
         public List<SelectListItem> Languages { get; set; }
-        
+
+        [Required(ErrorMessage = "Select a language")]
         public string Language { get; set; }
 
-        [Display(Name = "title")]
         public string MovieTitle { get; set; }
 
-        [Display(Name = "c")]
         public int MovieId { get; set; }
 
     }
