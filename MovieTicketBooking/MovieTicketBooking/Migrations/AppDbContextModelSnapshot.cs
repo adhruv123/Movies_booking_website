@@ -225,8 +225,8 @@ namespace MovieTicketBooking.Migrations
                     b.Property<int>("SeatNo")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ShowDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ShowDate")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ShowId")
                         .HasColumnType("int");

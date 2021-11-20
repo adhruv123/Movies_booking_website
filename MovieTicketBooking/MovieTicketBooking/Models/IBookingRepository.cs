@@ -8,7 +8,6 @@ namespace MovieTicketBooking.Models
     public interface IBookingRepository
     {
         IEnumerable<Booking> GetAllBookings();
-        Booking GetBooking(int id);
         Booking AddBooking(Booking newBooking);
 
     }

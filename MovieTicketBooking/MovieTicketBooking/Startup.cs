@@ -25,6 +25,13 @@ namespace MovieTicketBooking
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession(
+                options =>
+                {
+                    options.IdleTimeout = TimeSpan.FromMinutes(10);
+                }
+             );
+
             string path = Directory.GetCurrentDirectory();
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("AppDB").Replace("[Dir]", path))
@@ -57,6 +64,8 @@ namespace MovieTicketBooking
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication();
 

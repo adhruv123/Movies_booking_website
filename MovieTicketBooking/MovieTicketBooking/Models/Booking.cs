@@ -10,12 +10,19 @@ namespace MovieTicketBooking.Models
     public class Booking
     {
         public int Id { get; set; }
+        
         public string UserId { get; set; }
+
         [ForeignKey("UserId")]
+        
         public IdentityUser IdentityUser { get; set; }
+        
         public int ShowId { get; set; }
+        
         public Show Show { get; set; }
-        public DateTime ShowDate { get; set; }
+        
+        public string ShowDate { get; set; }
+        
         public int SeatNo { get; set; }
 
     }

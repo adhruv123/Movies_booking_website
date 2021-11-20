@@ -27,9 +27,5 @@ namespace MovieTicketBooking.Models
             return _context.Bookings.Include(b => b.Show).Include(b => b.IdentityUser);
         }
 
-        public Booking GetBooking(int id)
-        {
-            return _context.Bookings.Find(id);
-        }
     }
 }

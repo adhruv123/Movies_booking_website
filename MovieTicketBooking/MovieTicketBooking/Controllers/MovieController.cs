@@ -13,22 +13,45 @@ namespace MovieTicketBooking.Controllers
 {
     public class MovieController : Controller
     {
-        private readonly IMovieRepository _repo;
+        private readonly IMovieRepository _movieRepo;
 
-        public MovieController(IMovieRepository repo)
+        public MovieController(IMovieRepository movieRepo)
         {
-            this._repo = repo;
+            this._movieRepo = movieRepo;
         }
 
-        public ViewResult Index()
+        public ViewResult Index(string type)
         {
-            var model = _repo.GetAllMovies();
+            var model = new List<Movie>();
+            var movies = _movieRepo.GetAllMovies();
+            if (type == "Realeased" || string.IsNullOrEmpty(type))
+            {
+                foreach(var movie in movies)
+                {
+                    if(DateTime.Compare(DateTime.Parse(movie.ReleaseDate), DateTime.Now.Date) <= 0)
+                    {
+                        model.Add(movie);
+                    }
+                }
+                ViewBag.Type = "NotRealeased";
+            }
+            else
+            {
+                foreach (var movie in movies)
+                {
+                    if (DateTime.Compare(DateTime.Parse(movie.ReleaseDate), DateTime.Now.Date) >= 0)
+                    {
+                        model.Add(movie);
+                    }
+                }
+                ViewBag.Type = "Realeased";
+            }
             return View(model);
         }
 
         public async Task<ViewResult> Details(int id)
         {
-            Movie model = _repo.GetMovie(id);
+            Movie model = _movieRepo.GetMovie(id);
 
             dynamic movieDetails = await FetchMovieDetails(model.Title,DateTime.Parse(model.ReleaseDate).ToString("yyyy"));
 
@@ -66,7 +89,7 @@ namespace MovieTicketBooking.Controllers
 
             ViewBag.Plot = movieDetails["Plot"];
 
-            var movies = _repo.GetAllMovies();
+            var movies = _movieRepo.GetAllMovies();
             char[] c = { ',', ' ' };
             var genres = model.Genre.Split(c);
             var similarMovies = new List<Movie>();

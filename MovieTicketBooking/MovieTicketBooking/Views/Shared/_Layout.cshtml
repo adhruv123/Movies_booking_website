@@ -7,7 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <title>@ViewBag.Title</title>
+    
+    @RenderSection("Styles", required: false)
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(51, 53, 69)">
@@ -24,7 +28,10 @@
                             <a asp-controller="Admin" asp-action="Index" class="nav-link">Movies</a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="AllShows" class="nav-link">Shows</a>
+                            <a asp-controller="Admin" asp-action="Shows" class="nav-link">Shows</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Admin" asp-action="Bookings" class="nav-link">Bookings</a>
                         </li>
                     }
                 </ul>

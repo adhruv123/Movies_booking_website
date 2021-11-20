@@ -11,9 +11,19 @@ namespace MovieTicketBooking.ViewModels
     public class BookingIndexViewModel
     {
         public List<SelectListItem> ShowDates { get; set; }
-        /*public string ShowDate { get; set; }*/
+
+        [Display(Name = "date")]
+        public string ShowDate { get; set; }
+        
         public List<SelectListItem> Languages { get; set; }
-        /*public string Language { get; set; }*/
+        
+        public string Language { get; set; }
+
+        [Display(Name = "title")]
+        public string MovieTitle { get; set; }
+
+        [Display(Name = "c")]
+        public int MovieId { get; set; }
 
     }
 }
