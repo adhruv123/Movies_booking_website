@@ -15,8 +15,7 @@
                 <th>Released On</th>
                 <th>Language</th>
                 <th>Genre</th>
-                <th>Manage Movie</th>
-                <th>Manage Shows</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -31,15 +30,11 @@
                     <td>@movie.Genre</td>
                     <td>
                         <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">View</a>
-                        &nbsp;  &nbsp;
-
+                        &nbsp;
                         <a asp-action="EditMovie" asp-route-id="@movie.Id">Edit</a>
-
-                        &nbsp;  &nbsp;
+                        &nbsp;
                         <a asp-action="DeleteMovie" style="color:red;" asp-route-id="@movie.Id">Delete</a>
-                    </td>
-                    <td>
-                        &nbsp;  &nbsp;
+                        &nbsp;
                         <a asp-action="CreateShow" asp-route-id="@movie.Id ">Add Show</a>
                     </td>
                 </tr>
