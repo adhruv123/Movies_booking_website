@@ -30,16 +30,13 @@
                     <td>@movie.Language</td>
                     <td>@movie.Genre</td>
                     <td>
-                        @*<a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">View</a>*@
-                        <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id" class="fa" style="font-size:22px;">&#xf06e;</a>
+                        <a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">View</a>
                         &nbsp;  &nbsp;
 
-                        @*<a asp-action="EditMovie" asp-route-id="@movie.Id">Edit</a>*@
-                        <a asp-action="EditMovie" asp-route-id="@movie.Id" class="fa" style="font-size:22px;">&#xf044;</a>
+                        <a asp-action="EditMovie" asp-route-id="@movie.Id">Edit</a>
 
                         &nbsp;  &nbsp;
-                        @*<a asp-action="DeleteMovie" asp-route-id="@movie.Id">Delete</a>*@
-                        <a asp-action="DeleteMovie" asp-route-id="@movie.Id" class="fa" style="font-size:24px;color:red">&#xf014;</a>
+                        <a asp-action="DeleteMovie" style="color:red;" asp-route-id="@movie.Id">Delete</a>
                     </td>
                     <td>
                         &nbsp;  &nbsp;

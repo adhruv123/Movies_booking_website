@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.ViewModels;
@@ -17,32 +18,155 @@ namespace MovieTicketBooking.Controllers
 
         private readonly IBookingRepository _bookingRepo;
 
-        public BookingController(IShowRepository showRepo, IMovieRepository movieRepo, IBookingRepository bookingRepo)
+        private readonly UserManager<IdentityUser> _userManager;
+
+
+        public BookingController(UserManager<IdentityUser> userManager, IShowRepository showRepo, IMovieRepository movieRepo, IBookingRepository bookingRepo)
         {
+            _userManager = userManager;
             _movieRepo = movieRepo;
             _showRepo = showRepo;
             _bookingRepo = bookingRepo;
         }
 
         [HttpGet]
-        public IActionResult Index(int movieId)
+        public IActionResult Index(int id)
         {
-            var movie = _movieRepo.GetMovie(movieId);
-            BookingIndexViewModel model = new BookingIndexViewModel();
+            var movie = _movieRepo.GetMovie(id);
+
+            var showDates = new List<SelectListItem>();
+            
+            for(int i = 0; i < 3; i++)
+            {
+                var date = DateTime.Now.AddDays(i + 1).ToString("dd, MMM yyyy");
+                showDates.Add(new SelectListItem() { Text = date, Value = date, Selected = false });
+            }
+
+            var languages = new List<SelectListItem>();
+
             char[] c = { ',', ' ' };
 
             foreach (var language in movie.Language.Split(c, StringSplitOptions.RemoveEmptyEntries).ToList())
             {
-                model.Languages.Add(new SelectListItem() { Text = language, Value = language, Selected = false });
+                languages.Add(new SelectListItem() { Text = language, Value = language, Selected = false });
             }
 
-            for(int i=0;i<3;i++)
+            BookingIndexViewModel model = new BookingIndexViewModel()
             {
-                var date = DateTime.Now.AddDays(i).ToString("dd MM yyyy");
-                model.ShowDates.Add(new SelectListItem() { Text = date, Value = date, Selected = false });
-            }
+                ShowDates = showDates,
+                Languages = languages,
+                MovieId = movie.Id,
+                MovieTitle = movie.Title
+            };
             
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult Index(BookingIndexViewModel model)
+        {
+            return RedirectToAction("Shows", model);
+        }
+
+        [HttpGet]
+        [ActionName("Shows")]
+        public IActionResult SelectShow(BookingIndexViewModel m)
+        {
+            var times = new List<SelectListItem>();
+
+            var shows = _showRepo.GetAllShows();
+            foreach (var show in shows)
+            {
+                if (show.Movie.Id == m.MovieId)
+                {
+                    if (DateTime.Compare(DateTime.Parse(show.StartDate), DateTime.Parse(m.ShowDate)) <= 0 && DateTime.Compare(DateTime.Parse(show.EndDate), DateTime.Parse(m.ShowDate)) >= 0)
+                    {
+                        if (show.Language == m.Language)
+                        {
+                            times.Add(new SelectListItem() { Text = show.Time, Value = show.Id.ToString(), Selected = false });
+                        }
+                    }
+                }
+            }
+
+            var model = new SelectShowViewModel()
+            {
+                Times = times,
+                MovieId = m.MovieId,
+                MovieTitle = m.MovieTitle,
+                ShowDate = m.ShowDate,
+                Language = m.Language
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ActionName("Shows")]
+        public IActionResult SelectShow(SelectShowViewModel model)
+        {
+            return RedirectToAction("BookTickets", model);
+        }
+
+        [HttpGet]
+        public IActionResult BookTickets(SelectShowViewModel m)
+        {
+            var show = _showRepo.GetShow(m.ShowId);
+            ViewBag.MovieTitle = m.MovieTitle;
+            ViewBag.ShowDate = m.ShowDate;
+            ViewBag.Language = m.Language;
+            ViewBag.ShowTime = show.Time;
+            ViewBag.ShowId = m.ShowId;
+
+            ViewBag.Price = show.Price;
+
+            var bookedSeats = new List<string>();
+            var bookings = _bookingRepo.GetAllBookings();
+            foreach(var booking in bookings)
+            {
+                if(booking.ShowId == m.ShowId && DateTime.Compare(DateTime.Parse(booking.ShowDate),DateTime.Parse(m.ShowDate)) == 0)
+                {
+                    bookedSeats.Add(booking.SeatNo.ToString());
+                }
+            }
+            var seats = new List<SelectListItem>();
+            for(int i = 1; i <= 160; i++)
+            {
+                if (bookedSeats.Contains(i.ToString()))
+                {
+                    seats.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString(), Selected = false, Disabled = true });
+                }
+                else
+                {
+                    seats.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString(), Selected = false, Disabled = false });
+                }
+            }
+
+            return View(seats);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BookTickets(List<SelectListItem> model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var show = _showRepo.GetShow(int.Parse(HttpContext.Request.Form["showId"]));
+            foreach(var seatNo in model)
+            {
+                if (seatNo.Selected)
+                {
+
+                var booking = new Booking()
+                {
+                    IdentityUser = user,
+                    Show = show,
+                    ShowDate = HttpContext.Request.Form["showDate"],
+                    SeatNo = int.Parse(seatNo.Value)
+                };
+                _bookingRepo.AddBooking(booking);
+                }
+            }
+            return RedirectToAction("Index", "Movie");
+        }
+
     }
 }

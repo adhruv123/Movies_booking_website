@@ -44,12 +44,12 @@ namespace MovieTicketBooking.Models
 
         public IEnumerable<Show> GetAllShows()
         {
-            return _context.Shows.Include(m=>m.Movie);
+            return _context.Shows.Include(s => s.Movie);
         }
 
         public Show GetShow(int id)
         {
-            return _context.Shows.Find(id);
+            return _context.Shows.Include(s => s.Movie).FirstOrDefault(s => s.Id == id);
         }
     }
 }

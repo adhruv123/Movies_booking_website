@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,18 +15,22 @@ using System.Threading.Tasks;
 
 namespace MovieTicketBooking.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IMovieRepository _movieRepo;
 
         private readonly IShowRepository _showRepo;
 
+        private readonly IBookingRepository _bookingRepo;
+
         private readonly IWebHostEnvironment _env;
 
-        public AdminController(IShowRepository showRepo,IMovieRepository movieRepo, IWebHostEnvironment env)
+        public AdminController(IShowRepository showRepo,IMovieRepository movieRepo, IBookingRepository bookingRepo, IWebHostEnvironment env)
         {
             _movieRepo = movieRepo;
             _showRepo = showRepo;
+            _bookingRepo = bookingRepo;
             _env = env;
         }
         public IActionResult Index()
@@ -143,9 +148,7 @@ namespace MovieTicketBooking.Controllers
             }
         }
 
-
         /* ---------------------- shows ------------------------------------------------------*/
-
 
         [HttpGet]
         public IActionResult CreateShow(int id)
@@ -215,6 +218,7 @@ namespace MovieTicketBooking.Controllers
             return RedirectToAction("AllShows");
         }
 
+        [ActionName("Shows")]
         public IActionResult AllShows()
         {
             var model = _showRepo.GetAllShows();
@@ -226,10 +230,20 @@ namespace MovieTicketBooking.Controllers
             _showRepo.DeleteShow(id);
             return RedirectToAction("AllShows");
         }
+
         public IActionResult DeleteExpiredShow()
         {
             _showRepo.DeleteExpiredShow();
             return RedirectToAction("AllShows");
+        }
+
+        /* ---------------------- bookings ------------------------------------------------------*/
+
+        [ActionName("Bookings")]
+        public IActionResult AllBookings()
+        {
+            var model = _bookingRepo.GetAllBookings();
+            return View(model);
         }
     }
 }
