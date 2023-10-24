@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+/*using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;*/
+using Microsoft.EntityFrameworkCore;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.ViewModels;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,25 +50,27 @@ namespace MovieTicketBooking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMovie(MovieCreateViewModel model)
+        public async Task<IActionResult> CreateMovie([Bind("Title,ReleaseDate,Genre,Language,PosterPath")] Movie model)
         {
             if (ModelState.IsValid)
             {
                 string path = null;
-                if (model.Poster != null)
-                    path = ProcessUploadedFile(model.Poster);
-
-                dynamic movieDetails = await FetchMovieDetails(model.Title,model.ReleaseYear);
-
-                Movie newMovie = new Movie()
+                /*if (model.PosterPath != null)
                 {
-                    Title = model.Title,
-                    PosterPath = path,
-                    Genre = movieDetails["Genre"].ToString(),
-                    Language = movieDetails["Language"],
-                    ReleaseDate=movieDetails["Released"]
-                };
-                _movieRepo.AddMovie(newMovie);
+                    path = ProcessUploadedFile(model.PosterPath);
+                }*/
+                //dynamic movieDetails = await FetchMovieDetails(model.Title,model.ReleaseDate);
+
+                /* Movie newMovie = new Movie()
+                 {
+                     Title = model.Title,
+                     PosterPath = model.PosterPath,
+                     //Genre = movieDetails["Genre"].ToString(),
+                     //Language = movieDetails["Language"],
+                     //ReleaseDate=movieDetails["Released"]
+                     ReleaseDate = model.ReleaseDate
+                 };*/
+                _movieRepo.AddMovie(model);
                 return RedirectToAction("Index");
             }
 
@@ -80,7 +86,7 @@ namespace MovieTicketBooking.Controllers
             {
                 Id = movie.Id,
                 Title = movie.Title,
-                ReleaseYear = DateTime.Parse(movie.ReleaseDate).ToString("yyyy"),
+                ReleaseDate = DateTime.Parse(movie.ReleaseDate).ToString(),
                 ExistingPosterPath = movie.PosterPath
             };
 
@@ -95,7 +101,7 @@ namespace MovieTicketBooking.Controllers
                 Movie movie = _movieRepo.GetMovie(model.Id);
                 movie.Title = model.Title;
 
-                dynamic movieDetails = await FetchMovieDetails(model.Title, model.ReleaseYear);
+                dynamic movieDetails = await FetchMovieDetails(model.Title, model.ReleaseDate);
 
                 movie.Genre = movieDetails["Genre"];
                 movie.ReleaseDate = movieDetails["Released"];
@@ -110,7 +116,7 @@ namespace MovieTicketBooking.Controllers
                         GC.WaitForPendingFinalizers();
                         System.IO.File.Delete(path);
                     }
-                    movie.PosterPath = ProcessUploadedFile(model.Poster);
+                  //  movie.PosterPath = ProcessUploadedFile(model.Poster);
                 }
 
                 _movieRepo.EditMovie(movie);
@@ -143,7 +149,8 @@ namespace MovieTicketBooking.Controllers
                 using (var response = await httpClient.GetAsync("http://www.omdbapi.com?apikey=e3d108cb&t=" + title + "&y=" + releaseYear))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<dynamic>(apiResponse);
+                    return apiResponse;
+                    //return JsonConvert.DeserializeObject<dynamic>(apiResponse);
                 }
             }
         }

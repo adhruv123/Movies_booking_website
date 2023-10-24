@@ -13,7 +13,16 @@ namespace MovieTicketBooking.ViewModels
         public string Title { get; set; }
         [Required(ErrorMessage ="Release Year is required")]
         [Display(Name = "Release Year")]
-        public string ReleaseYear { get; set; }
+        public string ReleaseDate { get; set; }
+
+        [Required(ErrorMessage = "Release Genre is required")]
+        [Display(Name = "Release Genre")]
+        public string Genre { get; set; }
+
+        [Required(ErrorMessage = "Release Language is required")]
+        [Display(Name = "Release Language")]
+        public string Language { get; set; }
+
 
         public IFormFile Poster { get; set; }
     }

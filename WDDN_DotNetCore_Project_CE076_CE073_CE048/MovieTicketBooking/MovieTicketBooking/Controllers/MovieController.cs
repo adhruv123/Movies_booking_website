@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+//using MongoDB.Bson.IO;
 using MovieTicketBooking.Models;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -112,7 +113,8 @@ namespace MovieTicketBooking.Controllers
                 using (var response = await httpClient.GetAsync("http://www.omdbapi.com?apikey=e3d108cb&t=" + title + "&y=" + releaseYear))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<dynamic>(apiResponse);
+                 return apiResponse;
+                    //  return JsonConvert.DeserializeObject<dynamic>(apiResponse);
                 }
             }
         }
